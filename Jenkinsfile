@@ -5,7 +5,8 @@ pipeline{
         //其它情况，如使用多个仓库一些构建的，这种就需要额外添加拉取代码的stage了。
         stage('Build Artifact') {
             steps{
-                sh label:'maven building', script: 'mvn clean package -DskipTests'
+                // sh label:'maven building', script: 'mvn clean package -DskipTests'
+                sh label:'maven building', sh '/usr/local/apache-maven-3.9.6/bin/mvn clean package -DskipTests'
             }
         }
         stage('Build Image'){
