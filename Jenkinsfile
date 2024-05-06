@@ -3,9 +3,13 @@ pipeline {
     environment {
         DOCKERHUB_USERNAME = 'siyuan06'
         IMG_NAME = 'cicd-demo'
-        // 注意：这里我们使用 Groovy 的方式来生成时间戳
+        // 注意：这里我们使用 Groovy 的方式来生成时间戳   // 定义常量，这些可以在整个 pipeline 中使用
         IMG_TAG = "${new Date().format('yyyyMMdd_HHmm')}"
         IMG_FULL_NAME = "${IMG_NAME}:${IMG_TAG}"
+        
+        PROJECT_NAME = "cicd-demo"
+        UPLOAD_DIR = "/rj/k8s/apps/${env.PROJECT_NAME}"
+        FILE_NAME = "${env.UPLOAD_DIR}/deploy.yaml"
     }
     stages {
         stage('Build Artifact') {
@@ -40,7 +44,16 @@ pipeline {
         }
         stage('Deploy k8s') {
             steps {
-                sh label: 'deploy image to k8s', script: '/bin/bash deploy2k8s.sh'
+                script {
+                    // 使用 withCredentials 绑定凭证
+                    withCredentials([file(credentialsId: 'your-kubeconfig-credential-id', variable: 'KUBECONFIG')]) {
+                        // 确保部署文件目录存在
+                        sh "mkdir -p ${env.UPLOAD_DIR}"
+                        // 假设 deploy.yaml 已经在正确的位置或是在前一个步骤中被创建或复制到这个位置
+                        // 执行部署命令
+                        sh "kubectl --kubeconfig=${env.KUBECONFIG} apply -f ${env.FILE_NAME}"
+                    }
+                }
             }
         }
     }
