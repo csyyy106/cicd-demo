@@ -1,28 +1,52 @@
-pipeline{
+pipeline {
     agent any
+    environment {
+        DOCKERHUB_USERNAME = 'siyuan06'
+        IMG_NAME = 'cicd-demo'
+        // 注意：这里我们使用 Groovy 的方式来生成时间戳
+        IMG_TAG = "${new Date().format('yyyyMMdd_HHmm')}"
+        IMG_FULL_NAME = "${IMG_NAME}:${IMG_TAG}"
+    }
     stages {
-        //由于源码和Jenkinsfile处于同一仓库，在Jenkins项目执行时，会先将Jenkinsfile所在的仓库克隆下来，为了简单，这里就不重复添加拉取源码的操作了
-        //其它情况，如使用多个仓库一些构建的，这种就需要额外添加拉取代码的stage了。
         stage('Build Artifact') {
-            steps{
-                // sh label:'maven building', script: 'mvn clean package -DskipTests'
-                sh label:'maven building', script: '/usr/local/apache-maven-3.9.6/bin/mvn clean package -DskipTests'
+            steps {
+                sh label: 'maven building', script: '/usr/local/apache-maven-3.9.6/bin/mvn clean package -DskipTests'
             }
         }
-        stage('Build Image'){
-            steps{
-                sh label:'image building', script: '/bin/bash artifact2image.sh'
+        stage('Build and Push Image') {
+            steps {
+                script {
+                    // 使用 Jenkins 凭证
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+                        // 登录到 Docker Hub
+                        sh "docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD"
+                        // 构建镜像
+                        sh "docker build -t ${DOCKERHUB_USERNAME}/${IMG_NAME}:${IMG_TAG} ."
+                        // 推送镜像
+                        sh "docker push ${DOCKERHUB_USERNAME}/${IMG_NAME}:${IMG_TAG}"
+                        // 删除本地镜像
+                        sh "docker rmi ${DOCKERHUB_USERNAME}/${IMG_NAME}:${IMG_TAG}"
+                        // 登出 Docker Hub
+                        sh "docker logout"
+                    }
+                }
             }
         }
-        stage('Deploy k8s'){
-            steps{
-                sh label:'deploy image to k8s', script: '/bin/bash deploy2k8s.sh'
+        stage('Modify Deployment') {
+            steps {
+                // 修改 deploy.yaml 的镜像标签
+                sh "sed -i 's#{{IMAGE_NAME}}#${DOCKERHUB_USERNAME}/${IMG_NAME}:${IMG_TAG}#g' deploy.yaml"
+            }
+        }
+        stage('Deploy k8s') {
+            steps {
+                sh label: 'deploy image to k8s', script: '/bin/bash deploy2k8s.sh'
             }
         }
     }
     post {
-        success{
-            //成功清理工作空间，失败保留现场
+        success {
+            // 成功清理工作空间，失败保留现场
             cleanWs()
         }
     }
