@@ -10,14 +10,28 @@ IMG_TAG=`date "+%Y%M%d_%H%M"`      #镜像标签，如 20201223_1351
 # IMG_FULL_NAME="${IMG_REGISTRY}/${IMG_NAME}:${IMG_TAG}" #镜像上传与拉取的名称
 IMG_FULL_NAME="${IMG_NAME}:${IMG_TAG}" #镜像上传与拉取的名称
 
-#构建镜像
+#  使用 Jenkins 凭证
+withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+# 登录到 Docker Hub
+docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+#  构建和推送镜像
 docker build -t ${IMG_FULL_NAME} .
-
-#推送镜像
-docker push ${IMG_FULL_NAME}
-
+docker push ${DOCKERHUB_USERNAME}/my-image:my-tag
 #删除本地镜像
 docker rmi ${IMG_FULL_NAME}
+# 登出 Docker Hub
+sh "docker logout"
 
-#修改deploy.yaml的镜像标签
+
+
+# #构建镜像
+# docker build -t ${IMG_FULL_NAME} .
+
+# #推送镜像
+# docker push ${IMG_FULL_NAME}
+
+# #删除本地镜像
+# docker rmi ${IMG_FULL_NAME}
+
+# #修改deploy.yaml的镜像标签
 sed -i "s#{{IMAGE_NAME}}#${IMG_FULL_NAME}#g" deploy.yaml
