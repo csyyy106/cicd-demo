@@ -50,7 +50,7 @@ pipeline {
                     // withCredentials([certificate(credentialsId: '198dae6b-862b-4040-af38-0e0fb2715873', keystoreVariable: 'KEYSTORE_PATH', passwordVariable: 'KEYSTORE_PASSWORD')]) {
                     withKubeConfig([credentialsId: "198dae6b-862b-4040-af38-0e0fb2715873",serverUrl: "https://172.31.7.19:6443"]) {
                         sh "kubectl get nodes"
-                        sh echo "csy_in"
+                        echo "csy_in"
                                                                                                              // 使用证书进行操作，如设置环境变量等
                         // 确保部署文件目录存在
                         sh "mkdir -p ${env.UPLOAD_DIR}"
