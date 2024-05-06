@@ -64,10 +64,10 @@ pipeline {
             }
         }
     }
-    post {
-        success {
-            // 成功清理工作空间，失败保留现场
-            cleanWs()
-        }
-    }
+    // post {
+    //     success {
+    //         // 成功清理工作空间，失败保留现场
+    //         cleanWs()
+    //     }
+    // }
 }
