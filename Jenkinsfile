@@ -39,7 +39,8 @@ pipeline {
         stage('Modify Deployment') {
             steps {
                 // 修改 deploy.yaml 的镜像标签
-                sh "sed -i 's#{{IMAGE_NAME}}#${DOCKERHUB_USERNAME}/${IMG_NAME}:${IMG_TAG}#g' deploy.yaml"
+                // sh "sed -i 's#{{IMAGE_NAME}}#${DOCKERHUB_USERNAME}/${IMG_NAME}:${IMG_TAG}#g' deploy.yaml"
+                sh "sed -i 's#{{IMAGE_NAME}}#${DOCKERHUB_USERNAME}/${IMG_NAME}:${IMG_TAG}#g' ${env.FILE_NAME}"
             }
         }
         stage('Deploy k8s') {
