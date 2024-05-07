@@ -53,7 +53,7 @@ pipeline {
             steps {
                 script {
                     withKubeConfig([credentialsId: "198dae6b-862b-4040-af38-0e0fb2715873",serverUrl: "https://172.31.7.19:6443"]) {
-                        set -x
+                        // set -x
                         sh "kubectl get nodes"
                         echo 'oh  no '
                         echo "Image name to be used: ${IMG_FULL_NAME}"
@@ -71,10 +71,10 @@ pipeline {
             }
         }
     }
-    // post {
-    //     success {
-    //         // 成功清理工作空间，失败保留现场
-    //         cleanWs()
-    //     }
-    // }
+    post {
+        success {
+            // 成功清理工作空间，失败保留现场
+            cleanWs()
+        }
+    }
 }
