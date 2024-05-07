@@ -42,13 +42,13 @@ pipeline {
                 }
             }
         }
-        // stage('Modify Deployment') {
-        //     steps {
-        //         // 修改 deploy.yaml 的镜像标签
-        //         sh 'sed -i "s#{{IMAGE_NAME}}#${IMG_FULL_NAME}#g" deploy.yaml'
-        //         sh 'echo $?'
-        //     }
-        // }
+        stage('Modify Deployment') {
+            steps {
+                // 修改 deploy.yaml 的镜像标签
+                sh 'sed -i "s#{{IMAGE_NAME}}#${IMG_FULL_NAME}#g" deploy.yaml'
+                sh 'echo $?'
+            }
+        }
         stage('Deploy k8s') {
             steps {
                 script {
