@@ -5,7 +5,7 @@ pipeline {
         IMG_NAME = 'cicd-demo'
         // 注意：这里我们使用 Groovy 的方式来生成时间戳
         IMG_TAG = "${new Date().format('yyyyMMdd_HHmm')}"
-        IMG_FULL_NAME = "${IMG_NAME}:${IMG_TAG}"
+        IMG_FULL_NAME = "${DOCKERHUB_USERNAME}/${IMG_NAME}:${IMG_TAG}"
         
         PROJECT_NAME = "cicd-demo"
         UPLOAD_DIR = "/rj/k8s/apps/${env.PROJECT_NAME}"
