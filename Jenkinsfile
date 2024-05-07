@@ -5,11 +5,11 @@ pipeline {
         IMG_NAME = 'cicd-demo'
         // 注意：这里我们使用 Groovy 的方式来生成时间戳
         IMG_TAG = "${new Date().format('yyyyMMdd_HHmm')}"
-        IMG_FULL_NAME = "${DOCKERHUB_USERNAME}/${IMG_NAME}:${IMG_TAG}"    //上传和拉取的镜像名
+        IMG_FULL_NAME = "${DOCKERHUB_USERNAME}/${IMG_NAME}/v${BUILD_NUMBER}/:${IMG_TAG}"    //上传和拉取的镜像名
         
-        PROJECT_NAME = "cicd-demo"
-        UPLOAD_DIR = "/rj/k8s/apps/${env.PROJECT_NAME}"
-        FILE_NAME = "${env.UPLOAD_DIR}/deploy.yaml"
+        // PROJECT_NAME = "cicd-demo"
+        // UPLOAD_DIR = "/rj/k8s/apps/${env.PROJECT_NAME}"
+        // FILE_NAME = "${env.UPLOAD_DIR}/deploy.yaml"
     }
     stages {
         stage('Checkout SCM') {
@@ -55,18 +55,17 @@ pipeline {
                     withKubeConfig([credentialsId: "198dae6b-862b-4040-af38-0e0fb2715873",serverUrl: "https://172.31.7.19:6443"]) {
                         // set -x
                         sh "kubectl get nodes"
-                        echo 'oh  no '
                         echo "Image name to be used: ${IMG_FULL_NAME}"
-                        echo "${FILE_NAME}"
+                        // echo "${FILE_NAME}"
                         echo '----------'
                         echo "${env.WORKSPACE}"
                         // echo "cat ${FILE_NAME}"
-                        sh "cat ${env.FILE_NAME}"
+                        sh "cat ${env.WORKSPACE}/deploy.yaml"
                         // 确保部署文件目录存在
                         // sh "mkdir -p ${env.UPLOAD_DIR}"
                         // 假设 deploy.yaml 已经在正确的位置或是在前一个步骤中被创建或复制到这个位置
                         // 执行部署命令
-                        sh "kubectl --kubeconfig=${env.KUBECONFIG} apply -f ${env.FILE_NAME}"
+                        // sh "kubectl --kubeconfig=${env.KUBECONFIG} apply -f ${env.WORKSPACE}/deploy.yaml"
                     }
                 }
             }
