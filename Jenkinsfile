@@ -5,7 +5,7 @@ pipeline {
         IMG_NAME = 'cicd-demo'
         // 注意：这里我们使用 Groovy 的方式来生成时间戳
         IMG_TAG = "${new Date().format('yyyyMMdd_HHmm')}"
-        IMG_FULL_NAME = "${DOCKERHUB_USERNAME}/${IMG_NAME}:${IMG_TAG}"
+        IMG_FULL_NAME = "${DOCKERHUB_USERNAME}/${IMG_NAME}:${IMG_TAG}"    //上传和拉取的镜像名
         
         PROJECT_NAME = "cicd-demo"
         UPLOAD_DIR = "/rj/k8s/apps/${env.PROJECT_NAME}"
@@ -48,8 +48,7 @@ pipeline {
         stage('Modify Deployment') {
             steps {
                 // 修改 deploy.yaml 的镜像标签
-                sh "sed -i 's#{{IMAGE_NAME}}#${DOCKERHUB_USERNAME}/${IMG_NAME}:${IMG_TAG}#g' deploy.yaml"
-                // sh "sed -i 's#{{IMAGE_NAME}}#${DOCKERHUB_USERNAME}/${IMG_NAME}:${IMG_TAG}#g' ${env.FILE_NAME}"
+                sed -i "s#{{IMAGE_NAME}}#${IMG_FULL_NAME}#g" deploy.yaml
             }
         }
         stage('Deploy k8s') {
