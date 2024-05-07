@@ -56,12 +56,14 @@ pipeline {
                 script {
                     withKubeConfig([credentialsId: "198dae6b-862b-4040-af38-0e0fb2715873",serverUrl: "https://172.31.7.19:6443"]) {
                         sh "kubectl get nodes"
-                        echo "csy_in"
+                        echo 'oh  no '
+                        echo "Image name to be used: ${IMG_FULL_NAME}"
+                        echo '----------'
+                        sh 'cat ${env.FILE_NAME}'
                         // 确保部署文件目录存在
                         sh "mkdir -p ${env.UPLOAD_DIR}"
                         // 假设 deploy.yaml 已经在正确的位置或是在前一个步骤中被创建或复制到这个位置
                         // 执行部署命令
-                        sh 'echo $KEYSTORE_PATH'
                         sh "kubectl --kubeconfig=${env.KUBECONFIG} apply -f ${env.FILE_NAME}"
                     }
                 }
