@@ -3,7 +3,7 @@ pipeline {
     environment {
         DOCKERHUB_USERNAME = 'siyuan06'
         IMG_NAME = 'cicd-demo'
-        // 注意：这里我们使用 Groovy 的方式来生成时间戳   // 定义常量，这些可以在整个 pipeline 中使用
+        // 注意：这里我们使用 Groovy 的方式来生成时间戳
         IMG_TAG = "${new Date().format('yyyyMMdd_HHmm')}"
         IMG_FULL_NAME = "${IMG_NAME}:${IMG_TAG}"
         
@@ -12,6 +12,12 @@ pipeline {
         FILE_NAME = "${env.UPLOAD_DIR}/deploy.yaml"
     }
     stages {
+        stage('Checkout SCM') {
+            steps {
+                // 拉取 GitHub 仓库代码
+                checkout scm
+            }
+        }
         stage('Build Artifact') {
             steps {
                 sh label: 'maven building', script: '/usr/local/apache-maven-3.9.6/bin/mvn clean package -DskipTests'
@@ -46,13 +52,9 @@ pipeline {
         stage('Deploy k8s') {
             steps {
                 script {
-                    // 使用 withCredentials 绑定凭证
-                    // withCredentials([file(credentialsId: '198dae6b-862b-4040-af38-0e0fb2715873', variable: 'KUBECONFIG')]) {
-                    // withCredentials([certificate(credentialsId: '198dae6b-862b-4040-af38-0e0fb2715873', keystoreVariable: 'KEYSTORE_PATH', passwordVariable: 'KEYSTORE_PASSWORD')]) {
                     withKubeConfig([credentialsId: "198dae6b-862b-4040-af38-0e0fb2715873",serverUrl: "https://172.31.7.19:6443"]) {
                         sh "kubectl get nodes"
                         echo "csy_in"
-                                                                                                             // 使用证书进行操作，如设置环境变量等
                         // 确保部署文件目录存在
                         sh "mkdir -p ${env.UPLOAD_DIR}"
                         // 假设 deploy.yaml 已经在正确的位置或是在前一个步骤中被创建或复制到这个位置
