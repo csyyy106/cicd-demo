@@ -62,6 +62,7 @@ pipeline {
                         echo "${FILE_NAME}"
                         echo '----------'
                         sh 'cat ${env.FILE_NAME}'
+                        sh 'cat /rj/k8s/apps/cicd-demo/deploy.yaml'
                         // 确保部署文件目录存在
                         sh "mkdir -p ${env.UPLOAD_DIR}"
                         // 假设 deploy.yaml 已经在正确的位置或是在前一个步骤中被创建或复制到这个位置
