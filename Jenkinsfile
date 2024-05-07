@@ -55,7 +55,7 @@ pipeline {
                     withKubeConfig([credentialsId: "198dae6b-862b-4040-af38-0e0fb2715873",serverUrl: "https://172.31.7.19:6443"]) {
                         // set -x
                         sh "kubectl get nodes"
-                        echo "Image name to be used: ${IMG_FULL_NAME}"
+                        echo "Image name  is : ${IMG_FULL_NAME}"
                         // echo "${FILE_NAME}"
                         echo '----------'
                         echo "${env.WORKSPACE}"
