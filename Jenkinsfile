@@ -59,6 +59,7 @@ pipeline {
                         echo "Image name to be used: ${IMG_FULL_NAME}"
                         echo "${FILE_NAME}"
                         echo '----------'
+                        echo 'cat ${FILE_NAME}'
                         // 确保部署文件目录存在
                         // sh "mkdir -p ${env.UPLOAD_DIR}"
                         // 假设 deploy.yaml 已经在正确的位置或是在前一个步骤中被创建或复制到这个位置
