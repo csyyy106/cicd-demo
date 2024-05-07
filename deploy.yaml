@@ -17,8 +17,7 @@ spec:                 #期待运行状态
     spec:             #pod容器期望的状态
       containers:
         - name: cicd-demo
-          # image: {{IMAGE_NAME}}
-          image: 'siyuan06/cicd-demo:20240508_0204'
+          image: {{IMAGE_NAME}}
           imagePullPolicy: IfNotPresent
           env:
             - name: JVM_OPTS
