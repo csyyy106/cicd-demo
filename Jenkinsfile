@@ -59,7 +59,7 @@ pipeline {
                         echo "Image name to be used: ${IMG_FULL_NAME}"
                         echo "${FILE_NAME}"
                         echo '----------'
-                        echo "env.WORKSPACE"
+                        echo "${env.WORKSPACE}"
                         // echo "cat ${FILE_NAME}"
                         sh "cat ${env.FILE_NAME}"
                         // 确保部署文件目录存在
