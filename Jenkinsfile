@@ -31,11 +31,14 @@ pipeline {
                         // 登录到 Docker Hub
                         sh "docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD"
                         // 构建镜像
-                        sh "docker build -t ${DOCKERHUB_USERNAME}/${IMG_NAME}:${IMG_TAG} ."
+                        // sh "docker build -t ${DOCKERHUB_USERNAME}/${IMG_NAME}:${IMG_TAG} ."
+                        sh "docker build -t ${IMG_FULL_NAME} .
                         // 推送镜像
-                        sh "docker push ${DOCKERHUB_USERNAME}/${IMG_NAME}:${IMG_TAG}"
+                        // sh "docker push ${DOCKERHUB_USERNAME}/${IMG_NAME}:${IMG_TAG}"
+                        sh "docker push ${IMG_FULL_NAME}
                         // 删除本地镜像
-                        sh "docker rmi ${DOCKERHUB_USERNAME}/${IMG_NAME}:${IMG_TAG}"
+                        // sh "docker rmi ${DOCKERHUB_USERNAME}/${IMG_NAME}:${IMG_TAG}"
+                        sh "docker rmi ${IMG_FULL_NAME}
                         // 登出 Docker Hub
                         sh "docker logout"
                     }
