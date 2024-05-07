@@ -31,13 +31,10 @@ pipeline {
                         // 登录到 Docker Hub
                         sh "docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD"
                         // 构建镜像
-                        // sh "docker build -t ${DOCKERHUB_USERNAME}/${IMG_NAME}:${IMG_TAG} ."
                         sh "docker build -t ${IMG_FULL_NAME} . "
                         // 推送镜像
-                        // sh "docker push ${DOCKERHUB_USERNAME}/${IMG_NAME}:${IMG_TAG}"
                         sh "docker push ${IMG_FULL_NAME}"
                         // 删除本地镜像
-                        // sh "docker rmi ${DOCKERHUB_USERNAME}/${IMG_NAME}:${IMG_TAG}"
                         sh "docker rmi ${IMG_FULL_NAME}"
                         // 登出 Docker Hub
                         sh "docker logout"
@@ -56,6 +53,7 @@ pipeline {
             steps {
                 script {
                     withKubeConfig([credentialsId: "198dae6b-862b-4040-af38-0e0fb2715873",serverUrl: "https://172.31.7.19:6443"]) {
+                        set -x
                         sh "kubectl get nodes"
                         echo 'oh  no '
                         echo "Image name to be used: ${IMG_FULL_NAME}"
