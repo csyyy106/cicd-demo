@@ -48,7 +48,7 @@ pipeline {
         stage('Modify Deployment') {
             steps {
                 // 修改 deploy.yaml 的镜像标签
-                sed -i "s#{{IMAGE_NAME}}#${IMG_FULL_NAME}#g" deploy.yaml
+                sh 'sed -i "s#{{IMAGE_NAME}}#${IMG_FULL_NAME}#g" deploy.yaml'
             }
         }
         stage('Deploy k8s') {
