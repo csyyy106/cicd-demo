@@ -59,7 +59,7 @@ pipeline {
                         sh "kubectl get nodes"
                         echo 'oh  no '
                         echo "Image name to be used: ${IMG_FULL_NAME}"
-                        echo ${FILE_NAME}'
+                        echo "${FILE_NAME}"
                         echo '----------'
                         sh 'cat ${env.FILE_NAME}'
                         // 确保部署文件目录存在
