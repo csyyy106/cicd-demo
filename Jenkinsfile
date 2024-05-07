@@ -49,6 +49,7 @@ pipeline {
             steps {
                 // 修改 deploy.yaml 的镜像标签
                 sh 'sed -i "s#{{IMAGE_NAME}}#${IMG_FULL_NAME}#g" deploy.yaml'
+                sh 'echo $?'
             }
         }
         stage('Deploy k8s') {
@@ -58,6 +59,7 @@ pipeline {
                         sh "kubectl get nodes"
                         echo 'oh  no '
                         echo "Image name to be used: ${IMG_FULL_NAME}"
+                        echo ${FILE_NAME}'
                         echo '----------'
                         sh 'cat ${env.FILE_NAME}'
                         // 确保部署文件目录存在
