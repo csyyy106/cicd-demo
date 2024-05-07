@@ -62,10 +62,10 @@ pipeline {
                         // echo "cat ${FILE_NAME}"
                         sh "cat ${env.WORKSPACE}/deploy.yaml"
                         // 确保部署文件目录存在
-                        // sh "mkdir -p ${env.UPLOAD_DIR}"
+                        sh "ls  ${env.WORKSPACE}/deploy.yaml"
                         // 假设 deploy.yaml 已经在正确的位置或是在前一个步骤中被创建或复制到这个位置
                         // 执行部署命令
-                        // sh "kubectl --kubeconfig=${env.KUBECONFIG} apply -f ${env.WORKSPACE}/deploy.yaml"
+                        sh "kubectl --kubeconfig=${env.KUBECONFIG} apply -f ${env.WORKSPACE}/deploy.yaml"
                     }
                 }
             }
