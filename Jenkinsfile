@@ -60,7 +60,7 @@ pipeline {
                         echo "${FILE_NAME}"
                         echo '----------'
                         // sh 'cat ${env.FILE_NAME}'
-                        sh 'bash -c "cat ${env.FILE_NAME}"'
+                        bash -c "cat ${env.FILE_NAME}"'
                         sh 'cat /rj/k8s/apps/cicd-demo/deploy.yaml'
                         // 确保部署文件目录存在
                         sh "mkdir -p ${env.UPLOAD_DIR}"
