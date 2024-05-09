@@ -56,12 +56,12 @@ pipeline {
         }
     }
      post {
-        // always {
-        //     // 清理工作区空间
-        //     cleanWs()
-        // }
+        always {
+            // 清理工作区空间
+            cleanWs()
+        }
         success {
-            echo 'The pipeline  执行完成！'
+            echo 'The pipeline  执行成功！'
         }
         failure {
             echo 'The pipeline  执行失败！'
