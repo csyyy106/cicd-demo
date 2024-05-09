@@ -63,15 +63,16 @@ pipeline {
             }
         }
     }
-    post {
+     post {
+        // always {
+        //     // 清理工作区空间
+        //     cleanWs()
+        // }
         success {
-            // 如果流水线成功，执行以下步骤
-            cleanWs() // 清理工作空间的 Jenkins 步骤
+            echo 'The pipeline  执行完成！'
         }
         failure {
-            echo "oh no"
-            // 如果流水线失败，执行以下步骤
-            // 通常这里会保留工作空间进行调试，或者发送通知等
+            echo 'The pipeline  执行失败！'
         }
     }
 }
