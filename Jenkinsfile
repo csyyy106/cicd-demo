@@ -44,7 +44,7 @@ pipeline {
                     // 修改deploy文件中的镜像名
                     sh 'sed -i "s#{{IMAGE_NAME}}#${IMG_FULL_NAME}#g"  deploy.yaml'
                     sh 'echo $?'
-                    withKubeConfig(credentialsId: "198dae6b-862b-4040-af38-0e0fb2715873") {
+                     withKubeConfig([credentialsId: "198dae6b-862b-4040-af38-0e0fb2715873",serverUrl: "https://172.31.7.19:6443"]) {
                         echo '----------'
                         // 确认部署文件
                         sh "cat ${env.WORKSPACE}/deploy.yaml"
