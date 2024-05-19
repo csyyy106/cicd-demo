@@ -49,7 +49,8 @@ pipeline {
                         // 确认部署文件
                         sh "cat ${env.WORKSPACE}/deploy.yaml"
                         // 执行部署命令
-                        sh "kubectl --kubeconfig=${env.KUBECONFIG} apply -f ${env.WORKSPACE}/deploy.yaml"
+                        // sh "kubectl --kubeconfig=${env.KUBECONFIG} apply -f ${env.WORKSPACE}/deploy.yaml"
+                        sh "kubectl --kubeconfig=${env.KUBECONFIG} delete -f ${env.WORKSPACE}/deploy.yaml"
                     }
                 }
             }
